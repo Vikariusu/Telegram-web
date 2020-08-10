@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import StripeCheckout from 'react-stripe-checkout';
+import { withRouter } from "react-router-dom";
 import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 toast.configure();
 
@@ -61,8 +63,15 @@ class TelegramForm extends Component {
         const { status } = content;
 
         if (status === 'success') {
-            toast('Success! Check email for details',
-            { type: 'success'})
+          toast('Success! Check email for details',
+          { type: 'success'})
+
+          // redirect to the Confirmation page
+          // TODO: store the last telegram in localStorage
+          this.props.history.push({
+            pathname: '/confirmation',
+            message: telegram.message
+          })
         } else {
             toast('Something went wrong', {
                 type: 'error'
@@ -90,4 +99,4 @@ class TelegramForm extends Component {
     }
 }
 
-export default TelegramForm;
+export default withRouter(TelegramForm);
