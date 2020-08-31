@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import { withRouter } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { config } from '../Constants'
 import "react-toastify/dist/ReactToastify.css";
 
 toast.configure();
+
+const characterLimit = 300;
 
 class TelegramForm extends Component {
     state = {
@@ -48,7 +51,7 @@ class TelegramForm extends Component {
         // telegram added
         const body = { token, product, telegram };
         console.log(body)
-        const url = "http://localhost:3000/checkout";
+        const url = `${config.url.API_URL}/checkout`;
 
         const rawResponse = await fetch(url, {
           method: "POST",
@@ -80,11 +83,16 @@ class TelegramForm extends Component {
     }
 
     render() {
+        const charsLeft = characterLimit - this.state.message.length;
+
         return (
           <div>
             <form>
               <label htmlFor="message">Message</label>
               <textarea onChange={this.onInputChange} name="message" />
+              <p>Characters left: 
+                <span className={charsLeft > 0 ? 'chars-green' : 'chars-red'}>{charsLeft}</span>
+              </p>
             </form>
               <StripeCheckout
                 stripeKey="pk_test_JVMoB5wKqBGDEaxya5HSd0gg00zDywCZMr"
@@ -93,7 +101,11 @@ class TelegramForm extends Component {
                 shippingAddress
                 amount={250}
                 name="telegram"
-              />
+              >
+              <button disabled={charsLeft < 0}>
+                Send Telegram
+              </button>
+              </StripeCheckout>
           </div>
         );
     }
