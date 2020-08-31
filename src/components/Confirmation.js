@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 
 // TODO: display the last submitted telegram (from localStorage) OR display error page
 function Confirmation (props) {
@@ -7,8 +7,14 @@ function Confirmation (props) {
 
     return (
         <div>
+            <p>Your payment was received, check the email for more details.</p>
             <p>Your message</p>
             <p>{message}</p>
+
+            <Link to="/new">
+                <button>Send another telegram</button>
+            </Link>
+
         </div>
     )
 }
